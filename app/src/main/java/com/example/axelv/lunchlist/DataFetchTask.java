@@ -11,13 +11,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class DataFetchTask extends AsyncTask<URL, Void, String> {
+public class DataFetchTask extends AsyncTask<URL[], Void, String> {
     ResultHandler handler;
 
     @Override
-    protected String doInBackground(URL... urls) {
+    protected String doInBackground(URL[]... urls) {
         try {
-            URLConnection connection = urls[0].openConnection();
+            URLConnection connection = urls[0][0].openConnection();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = reader.readLine();
             String res = "";

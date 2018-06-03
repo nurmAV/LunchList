@@ -37,7 +37,18 @@ public class MainActivity extends AppCompatActivity implements ResultHandler{
             // Initialize and execute the AsyncTask fetching the data
             DataFetchTask dft = new DataFetchTask();
             dft.handler = this;
-            dft.execute(new URL("http://www.amica.fi/modules/json/json/Index?costNumber=0190&language=fi&firstDay=" + sdf.format(calendar.getTime())));
+            URL[] urls = new URL[2];
+            urls[0] = new URL("http://www.amica.fi/modules/json/json/Index?costNumber=0190&language=fi&firstDay=" + sdf.format(calendar.getTime()));
+            //dft.execute(new URL("http://www.amica.fi/modules/json/json/Index?costNumber=0190&language=fi&firstDay=" + sdf.format(calendar.getTime())));
+            dft.execute(urls);
+            // Initialize Sodexo reguest
+            sdf = new SimpleDateFormat("YYYY/MM//dd");
+            DataFetchTask sodexo = new DataFetchTask();
+            sodexo.handler = this;
+            //sodexo.execute(new URL("https://www.sodexo.fi/ruokalistat/output/weekly_json/142/"+ sdf.format(calendar.getTime()) +"/fi"));
+
+
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
