@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.axelv.lunchlist.model.Menu;
 import com.example.axelv.lunchlist.model.Restaurant;
 import com.example.axelv.lunchlist.parsers.AmicaParser;
+import com.example.axelv.lunchlist.parsers.SodexoParser;
 import com.example.axelv.lunchlist.views.RestaurantView;
 
 import java.net.MalformedURLException;
@@ -32,20 +33,44 @@ public class MainActivity extends AppCompatActivity implements ResultHandler{
             calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-            Log.i("LunchList", sdf.format(calendar.getTime()));
+
+            SimpleDateFormat amicaFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String amicaDate = amicaFormat.format(calendar.getTime());
+
+            SimpleDateFormat sodexoFormat  = new SimpleDateFormat("yyyy/MM//dd");
+            String sodexoDate = sodexoFormat.format(calendar.getTime());
+
+
+            // Amica and sodexo restaurant IDs to be plugged into the URLs
+            String[] amicaIDs = {"0190", "0199"}; // Alvari, TUAS
+            String[] sodexoIDs = {"142", "26521","13918", "140"}; // T-talo, Kvarkki, Valimo, Konetekniikka
+
+           // Log.i("LunchList", amicaFormat.format(calendar.getTime()));
             // Initialize and execute the AsyncTask fetching the data
             DataFetchTask dft = new DataFetchTask();
             dft.handler = this;
-            URL[] urls = new URL[2];
-            urls[0] = new URL("http://www.amica.fi/modules/json/json/Index?costNumber=0190&language=fi&firstDay=" + sdf.format(calendar.getTime()));
+            URL[] amicaURLs = new URL[amicaIDs.length];
+            URL[] sodexoURLs = new URL[sodexoIDs.length];
+
+            /*for(int i = 0; i < amicaUrls.length; i++){
+                amicaUrls[i] = new URL(
+                    String.format("http://www.amica.fi/modules/json/json/Index?costNumber=%s&language=fi&firstDay=%s", amicaIDs[i], amicaDate)
+                );
+            }*/
+            for(int j = 0; j < sodexoURLs.length; j++){
+                sodexoURLs[j] = new URL(
+                        String.format("https://www.sodexo.fi/ruokalistat/output/weekly_json/%s/%s/fi",sodexoIDs[j], sodexoDate)
+                );
+            }
+
+
             //dft.execute(new URL("http://www.amica.fi/modules/json/json/Index?costNumber=0190&language=fi&firstDay=" + sdf.format(calendar.getTime())));
-            dft.execute(urls);
+            dft.execute(sodexoURLs);
             // Initialize Sodexo reguest
-            sdf = new SimpleDateFormat("YYYY/MM//dd");
-            DataFetchTask sodexo = new DataFetchTask();
-            sodexo.handler = this;
-            //sodexo.execute(new URL("https://www.sodexo.fi/ruokalistat/output/weekly_json/142/"+ sdf.format(calendar.getTime()) +"/fi"));
+
+
+
+
 
 
 
@@ -57,8 +82,9 @@ public class MainActivity extends AppCompatActivity implements ResultHandler{
     }
     public void changeText(String s) {
         //TextView tw = findViewById(R.id.textview);
-        AmicaParser parser = new AmicaParser();
-        Restaurant restaurant = parser.parse(s);
+        AmicaParser amicaParser = new AmicaParser();
+        SodexoParser sodexoParser = new SodexoParser();
+        Restaurant restaurant = sodexoParser.parse(s);
 
 
         LinearLayout layout =  findViewById(R.id.linearLayout);
