@@ -2,6 +2,10 @@ package com.example.axelv.lunchlist;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import com.example.axelv.lunchlist.model.Restaurant;
+import com.example.axelv.lunchlist.model.RestaurantType;
+import com.example.axelv.lunchlist.parsers.AmicaParser;
+import com.example.axelv.lunchlist.parsers.SodexoParser;
 
 
 import java.io.BufferedReader;
@@ -11,37 +15,73 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class DataFetchTask extends AsyncTask<URL[], Void, String> {
+public class DataFetchTask extends AsyncTask<Tuple<URL, Integer>[], Integer, Tuple<String, Integer>[]> {
     ResultHandler handler;
 
     @Override
-    protected String doInBackground(URL[]... urls) {
-        try {
-            URLConnection connection = urls[0][0].openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = reader.readLine();
-            String res = "";
+    protected Tuple<String, Integer>[] doInBackground(Tuple<URL, Integer>[]... urls) {
 
-            while(line != null){
-                res +=  line + "\n";
-                line = reader.readLine();
+        Tuple<URL, Integer>[] restaurantTuples = urls[0];
+        Tuple<String, Integer>[] res = new Tuple[urls[0].length];
+
+        for(int i = 0; i < restaurantTuples.length; i++) {
+            try {
+                Tuple<URL, Integer> tuple = restaurantTuples[i];
+                Log.i("DataFetchTask", tuple.first().toString());
+                URLConnection connection = tuple.first().openConnection();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = reader.readLine();
+                String json = "";
+
+                while (line != null) {
+                    json += line + "\n";
+                    line = reader.readLine();
+                }
+                Log.i("LunchList", json);
+                res[i] = new Tuple(json, tuple.second());
+                publishProgress(i +1);
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return res;
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-      return "";
+        return res;
     }
 
     @Override
-    protected void onPostExecute(String res){
-        Log.i("LunchList", res);
-        handler.changeText(res);
+    protected void onPostExecute(Tuple<String, Integer>[] res){
+
+        Restaurant[] restaurants = new Restaurant[res.length];
+        for(int i = 0; i < res.length; i++) {
+            Tuple<String, Integer> tuple = res[i];
+            AmicaParser amicaParser = new AmicaParser();
+            SodexoParser sodexoParser = new SodexoParser();
+
+            // Find the correct parser
+            switch(tuple.second()){
+                case RestaurantType.AMICA:
+                    restaurants[i] = amicaParser.parse(tuple.first());
+                    break;
+                case RestaurantType.SODEXO:
+                    restaurants[i] = sodexoParser.parse(tuple.first());
+                    break;
+                default:
+                    // Do nothing
+            }
 
 
+        }
+
+        handler.changeText(restaurants);
     }
+
+    @Override
+    protected void onProgressUpdate(Integer... values){
+            handler.updateProgress(values[0]);
+    }
+
+
 }
 
 
