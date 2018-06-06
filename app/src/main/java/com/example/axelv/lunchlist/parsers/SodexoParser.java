@@ -24,7 +24,7 @@ public class SodexoParser extends Parser {
             for(int day = 0; day < days.length; day++){
                 Menu menu = new Menu();
                 JSONArray dailyMenu = menus.getJSONArray(days[day]);
-                Log.i("LunchList", days[day]);
+               // Log.i("LunchList", days[day]);
                 for(int i = 0; i < dailyMenu.length(); i++){
                     String item = dailyMenu.getJSONObject(i).getString("title_fi");
                     Log.i("LunchList", item);
@@ -38,7 +38,7 @@ public class SodexoParser extends Parser {
             return restaurant;
 
         } catch (JSONException e) {
-            Log.e("LunchList", e.getMessage());
+            Log.e("SodexoParser", e.getMessage());
             e.printStackTrace();
         }
         return null;

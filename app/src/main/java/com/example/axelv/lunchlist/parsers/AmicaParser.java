@@ -43,6 +43,7 @@ public class AmicaParser extends Parser {
             return restaurant;
 
         } catch (JSONException e) {
+            Log.e("AmicaParser", e.getMessage());
             e.printStackTrace();
         }
         return null;
