@@ -2,12 +2,11 @@ package com.example.axelv.lunchlist.views;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.example.axelv.lunchlist.MainActivity;
 import com.example.axelv.lunchlist.model.Menu;
 import com.example.axelv.lunchlist.model.Restaurant;
 
@@ -20,6 +19,7 @@ public class RestaurantView extends LinearLayout {
         //this.setBackgroundColor(Color.rgb(230,230,230));
         this.restaurant = restaurant;
         this.setOrientation(LinearLayout.VERTICAL);
+        this.setPadding(5,10,5,10);
         TextView restaurantName = new TextView(context);
         restaurantName.setText(restaurant.getName());
         restaurantName.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -29,6 +29,7 @@ public class RestaurantView extends LinearLayout {
         restaurantName.setBackgroundColor(Color.rgb(150,150,150));
 
         this.addView(restaurantName);
+        Log.i("LunchList", restaurant.getName());
         Menu menu = restaurant.getMenu(0);
         for(String s : menu.getItems()){
             TextView tw = new TextView(context);
