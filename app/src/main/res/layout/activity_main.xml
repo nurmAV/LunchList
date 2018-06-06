@@ -7,13 +7,18 @@
         android:layout_height="match_parent"
         tools:context="com.example.axelv.lunchlist.MainActivity" android:id="@+id/layout">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="341dp"
-            android:layout_height="661dp" android:id="@+id/linearLayout" tools:layout_editor_absoluteY="-60dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="0.504" android:gravity="center_horizontal">
-    </LinearLayout>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/scrollView2">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/linearLayout"
+                tools:layout_editor_absoluteY="-60dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintHorizontal_bias="0.504" android:gravity="center_horizontal">
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
