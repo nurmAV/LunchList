@@ -3,9 +3,11 @@ package com.example.axelv.lunchlist;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.axelv.lunchlist.model.Menu;
@@ -13,6 +15,7 @@ import com.example.axelv.lunchlist.model.Restaurant;
 import com.example.axelv.lunchlist.model.RestaurantType;
 import com.example.axelv.lunchlist.parsers.AmicaParser;
 import com.example.axelv.lunchlist.parsers.SodexoParser;
+import com.example.axelv.lunchlist.views.DayFragment;
 import com.example.axelv.lunchlist.views.RestaurantView;
 
 import java.net.MalformedURLException;
@@ -96,9 +99,17 @@ public class MainActivity extends AppCompatActivity implements ResultHandler{
        // loadingText.setText("");
 
         //Find the linear layout in which to put the restaurants
-        LinearLayout layout =  findViewById(R.id.linearLayout);
+        /*LinearLayout layout =  findViewById(R.id.linearLayout);
         for(Restaurant restaurant : restaurants)
-            layout.addView(new RestaurantView(restaurant, getApplicationContext()));
+            layout.addView(new RestaurantView(restaurant, getApplicationContext()));*/
+
+        FrameLayout frame = findViewById(R.id.fragmentContainer);
+        FragmentManager manager = getSupportFragmentManager();
+        DayFragment dayFragment = new DayFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("restaurants", restaurants);
+        dayFragment.setArguments(args);
+        manager.beginTransaction().add(R.id.fragmentContainer, dayFragment).commit();
     }
 
     public void updateProgress(int i){
