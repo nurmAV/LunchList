@@ -27,15 +27,18 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements ResultHandler{
 
 
+        Calendar calendar;
+        int currentDayOfWeek;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try {
             // Get the first day of the week
-            Calendar calendar = Calendar.getInstance();
-            calendar.setFirstDayOfWeek(Calendar.MONDAY);
+            calendar = Calendar.getInstance();
 
+            calendar.setFirstDayOfWeek(Calendar.MONDAY);
+            currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
 
             SimpleDateFormat amicaFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -108,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements ResultHandler{
         DayFragment dayFragment = new DayFragment();
         Bundle args = new Bundle();
         args.putSerializable("restaurants", restaurants);
+        args.putInt("day_of_week", currentDayOfWeek );
+        Log.i("MainActivity", Integer.toString(currentDayOfWeek));
         dayFragment.setArguments(args);
         manager.beginTransaction().add(R.id.fragmentContainer, dayFragment).commit();
     }

@@ -14,7 +14,7 @@ public class RestaurantView extends LinearLayout {
 
     private Restaurant restaurant;
 
-    public RestaurantView(Restaurant restaurant, Context context){
+    public RestaurantView(Restaurant restaurant, int day, Context context){
         super(context);
         //this.setBackgroundColor(Color.rgb(230,230,230));
         this.restaurant = restaurant;
@@ -30,7 +30,7 @@ public class RestaurantView extends LinearLayout {
 
         this.addView(restaurantName);
         Log.i("LunchList", restaurant.getName());
-        Menu menu = restaurant.getMenu(0);
+        Menu menu = restaurant.getMenu(day);
         for(String s : menu.getItems()){
             TextView tw = new TextView(context);
             tw.setText(s);

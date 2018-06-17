@@ -37,6 +37,10 @@ public class AmicaParser extends Parser {
 
                 }
                 restaurant.setMenu(menu, i);
+
+             if(menu.getItems() != null){
+                 menu.addItem("Ruokalistaa ei saatavilla");
+             }
             }
 
 

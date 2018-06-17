@@ -35,6 +35,13 @@ public class SodexoParser extends Parser {
 
 
             }
+            Menu saturdayMenu = new Menu();
+            Menu sundayMenu   = new Menu();
+            saturdayMenu.addItem("Ruokalista ei saatavilla");
+            sundayMenu.addItem("Ruokalistaa ei saatavilla");
+            restaurant.setMenu(saturdayMenu, 5);
+            restaurant.setMenu(sundayMenu, 6);
+
             return restaurant;
 
         } catch (JSONException e) {

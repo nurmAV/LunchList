@@ -31,9 +31,10 @@ public class DayFragment extends Fragment {
 
         Bundle args = getArguments();
         Restaurant[] restaurants = (Restaurant[]) args.getSerializable("restaurants");
+        int dayOfWeek = args.getInt("day_of_week");
 
         for(Restaurant restaurant: restaurants){
-            menus.addView(new RestaurantView(restaurant, getActivity().getApplicationContext()));
+            menus.addView(new RestaurantView(restaurant, dayOfWeek -1, getActivity().getApplicationContext()));
         }
 
 
