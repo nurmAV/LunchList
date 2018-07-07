@@ -6,6 +6,16 @@ public class Restaurant {
     private String openingHours;
     private String name;
 
+    public Restaurant() {
+        for(int i = 0; i < 7; i++){
+            Menu menu = new Menu();
+            menu.addItem("Ruokalista ei saatavilla");
+            this.setMenu(menu, i);
+        }
+    }
+
+
+
     public void setMenu(Menu menu, int day) {
         this.menus[day] = menu;
     }
