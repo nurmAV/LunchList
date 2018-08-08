@@ -1,6 +1,8 @@
 package com.example.axelv.lunchlist.model;
 
-public class Restaurant {
+import java.io.Serializable;
+
+public class Restaurant implements Serializable {
 
     private Menu[] menus = new Menu[7];
     private String openingHours;

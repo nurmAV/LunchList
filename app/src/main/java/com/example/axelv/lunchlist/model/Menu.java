@@ -1,9 +1,10 @@
 package com.example.axelv.lunchlist.model;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Menu {
+public class Menu implements Serializable {
 
     private ArrayList<String> items = new ArrayList<>();
 

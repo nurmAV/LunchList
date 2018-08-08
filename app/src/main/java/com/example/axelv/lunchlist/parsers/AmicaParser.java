@@ -15,9 +15,10 @@ public class AmicaParser extends Parser {
     @Override
     public Restaurant parse(String json) {
 
+        Restaurant restaurant = new Restaurant();
+
         try {
             JSONObject jsonObject = new JSONObject(json);
-            Restaurant restaurant = new Restaurant();
             restaurant.setName(jsonObject.getString("RestaurantName"));
             JSONArray menusForDays =jsonObject.getJSONArray("MenusForDays");
 
@@ -50,6 +51,9 @@ public class AmicaParser extends Parser {
             Log.e("AmicaParser", e.getMessage());
             e.printStackTrace();
         }
-        return null;
+        finally {
+            return restaurant;
+        }
+
     }
 }

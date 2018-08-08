@@ -8,6 +8,7 @@ import com.example.axelv.lunchlist.parsers.AmicaParser;
 import com.example.axelv.lunchlist.parsers.SodexoParser;
 
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class DataFetchTask extends AsyncTask<Tuple<URL, Integer>[], Integer, Tuple<String, Integer>[]> {
+public class DataFetchTask extends AsyncTask<Tuple<URL, Integer>[], Void, Tuple<String, Integer>[]> {
     ResultHandler handler;
 
     @Override
@@ -28,7 +29,7 @@ public class DataFetchTask extends AsyncTask<Tuple<URL, Integer>[], Integer, Tup
             try {
                 Tuple<URL, Integer> tuple = restaurantTuples[i];
                 Log.i("DataFetchTask", tuple.first().toString());
-                URLConnection connection = tuple.first().openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) tuple.first().openConnection();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = reader.readLine();
                 String json = "";
@@ -39,7 +40,7 @@ public class DataFetchTask extends AsyncTask<Tuple<URL, Integer>[], Integer, Tup
                 }
                 Log.i("LunchList", json);
                 res[i] = new Tuple(json, tuple.second());
-                publishProgress(i +1);
+                //publishProgress(i +1);
 
 
             } catch (IOException e) {
@@ -70,16 +71,16 @@ public class DataFetchTask extends AsyncTask<Tuple<URL, Integer>[], Integer, Tup
                     // Do nothing
             }
 
+            handler.onResult(restaurants);
 
         }
 
-        handler.changeText(restaurants);
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... values){
-            handler.updateProgress(values[0]);
-    }
+    //@Override
+    //protected void onProgressUpdate(Integer... values){
+      //      handler.updateProgress(values[0]);
+    //}
 
 
 }

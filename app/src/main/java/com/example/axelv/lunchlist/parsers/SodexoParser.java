@@ -12,6 +12,7 @@ public class SodexoParser extends Parser {
     public Restaurant parse(String json) {
 
         Restaurant restaurant = new Restaurant();
+
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject meta = jsonObject.getJSONObject("meta");
@@ -47,7 +48,14 @@ public class SodexoParser extends Parser {
         } catch (JSONException e) {
             Log.e("SodexoParser", e.getMessage());
             e.printStackTrace();
+            Menu  menu = new Menu();
+            menu.addItem("Ruokalista ei saatavilla");
+            restaurant.setMenu(menu, 1);
+
         }
-        return null;
+        finally{
+            return restaurant;
+        }
+
     }
 }
