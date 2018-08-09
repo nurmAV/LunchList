@@ -10,11 +10,16 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="388dp"
-            android:layout_height="55dp" android:id="@+id/linearLayout2">
+            android:layout_height="55dp" android:id="@+id/linearLayout2" android:gravity="center">
         <Button
                 android:text="Yesterday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/yesterday" android:layout_weight="1"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/dayOfWeek" android:layout_weight="1"
+                android:gravity="center"/>
         <Button
                 android:text="Tomorrow"
                 android:layout_width="wrap_content"

@@ -10,86 +10,72 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.example.axelv.lunchlist.model.Restaurant;
 import com.example.axelv.lunchlist.model.RestaurantType;
 import com.example.axelv.lunchlist.views.DayFragment;
 
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity{
 
-
-        Calendar calendar;
-        int currentDayOfWeek;
-        Restaurant[] restaurants;
-        Button tomorrowButton, yesterdayButton;
+        private Calendar calendar;
+        private int currentDayOfWeek;
+        private Restaurant[] restaurants;
+        private Button tomorrowButton, yesterdayButton;
+        private TextView dayName;
+        private String[] dayNames = {"Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calendar = Calendar.getInstance();
-        currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        // Setting up constants
+        calendar                      = Calendar.getInstance();
+        currentDayOfWeek              = resolveDay(calendar.get(Calendar.DAY_OF_WEEK));
+        restaurants                   = (Restaurant[]) getIntent().getSerializableExtra("restaurants");
+        FrameLayout frame             = findViewById(R.id.fragmentContainer);
+        FragmentManager manager       = getSupportFragmentManager();
+        final DayFragment dayFragment = new DayFragment();
+        Bundle args                   = new Bundle();
 
-        Restaurant[] restaurants = (Restaurant[]) getIntent().getSerializableExtra("restaurants");
-        FrameLayout frame = findViewById(R.id.fragmentContainer);
-        FragmentManager manager = getSupportFragmentManager();
-        DayFragment dayFragment = new DayFragment();
-        Bundle args = new Bundle();
+        // Set arguments for the DayFragment
         args.putSerializable("restaurants", restaurants);
-        args.putInt("day_of_week", resolveDay(currentDayOfWeek));
-        Log.i("MainActivity", Integer.toString(currentDayOfWeek));
+        args.putInt("day_of_week", currentDayOfWeek);
         dayFragment.setArguments(args);
         manager.beginTransaction().add(R.id.fragmentContainer, dayFragment).commit();
 
+        // UI elements
+        dayName         = findViewById(R.id.dayOfWeek);
+        tomorrowButton  = findViewById(R.id.tomorrow);
+        yesterdayButton = findViewById(R.id.yesterday);
+        dayName.setText(dayNames[currentDayOfWeek]);
+        tomorrowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dayFragment.nextDay();
+                currentDayOfWeek = (currentDayOfWeek + 8) % 7;
+                dayName.setText(dayNames[currentDayOfWeek]);
+            }
+        });
+
+        yesterdayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dayFragment.previousDay();
+                currentDayOfWeek = (currentDayOfWeek + 6) % 7;
+                dayName.setText(dayNames[currentDayOfWeek]);
+            }
+        });
+
 
     }
-    public void changeText(Restaurant[] restaurants) {
-
-        FrameLayout frame = findViewById(R.id.fragmentContainer);
-        FragmentManager manager = getSupportFragmentManager();
-        DayFragment dayFragment = new DayFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("restaurants", restaurants);
-        args.putInt("day_of_week", resolveDay(currentDayOfWeek));
-        Log.i("MainActivity", Integer.toString(currentDayOfWeek));
-        dayFragment.setArguments(args);
-        manager.beginTransaction().add(R.id.fragmentContainer, dayFragment).commit();
-    }
-
-    public void updateProgress(int i){
-        //TextView loadingText = findViewById(R.id.loadingText);
-        //loadingText.setText("Loading... " + i + "/6" );
-    }
-
-    /**  Read*/
+    /** Maps the calendar day of week to its corresponding restaurant array index */
     private int resolveDay(int day){
         if(day == 1) return 6;
         else return day - 2;
     }
-
-    public void increaseDay() {
-        currentDayOfWeek = (currentDayOfWeek  + 8) % 7;
-    }
-    public void decreaseDay() {
-        currentDayOfWeek = (currentDayOfWeek + 6) % 7;
-    }
-
-    private void changeDay(int day) {
-        DayFragment df  = new DayFragment();
-        Bundle args = new Bundle();
-        args.putInt("day_of_week", day);
-        //df.setArguments(n);
-
-    }
-
-
-
 
 }
 
