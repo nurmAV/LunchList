@@ -23,7 +23,6 @@ public class DayFragment extends Fragment {
     int dayOfWeek;
     View view;
     LinearLayout menus;
-    TextView
     public DayFragment() {
         // Required empty public constructor
     }
